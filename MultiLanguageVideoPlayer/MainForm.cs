@@ -39,6 +39,15 @@ namespace MultiLanguageVideoPlayer
             };
             timer.AutoReset = true;
             timer.Enabled = true;
+
+            if (Properties.Settings.Default.DefaultVideoConfiguration == 0)
+            {
+                LeftVideoRadioButton.Checked = true;
+            }
+            else
+            {
+                RightVideoRadioButton.Checked = true;
+            }
         }
 
         private void UpdateVideoPosition(int time)
@@ -75,7 +84,7 @@ namespace MultiLanguageVideoPlayer
             {
                 SelectedFileLabel.Visible = true;
                 _filePath = openFileDialog.FileName;
-                SelectedFileLabel.Text = Path.GetFileName(openFileDialog.FileName);
+                SelectedFileLabel.Text = openFileDialog.FileName;
                 Text = Path.GetFileName(openFileDialog.FileName);
 
                 new VideoAnalyzer(openFileDialog.FileName, videoinfo =>
@@ -146,7 +155,7 @@ namespace MultiLanguageVideoPlayer
                     {
                         FileName = Properties.Settings.Default.VlcPath,
                         Arguments =
-                            $"{_filePath} --aout=directx --directx-audio-device=\"{_videoInfo.AudioDevices[LeftAudioDevice.SelectedItem.ToString()]}\" -I http --http-host localhost --http-port {VlcClient.FirstPlayerPort} --http-password=\"1\" --start-time={VideoPosition.Value}",
+                            $"--aout=directx --directx-audio-device=\"{_videoInfo.AudioDevices[LeftAudioDevice.SelectedItem.ToString()]}\" -I http --http-host localhost --http-port {VlcClient.FirstPlayerPort} --http-password=\"1\" --start-time={VideoPosition.Value}",
                         UseShellExecute = false,
                         RedirectStandardOutput = true,
                         RedirectStandardError = true,
@@ -160,7 +169,7 @@ namespace MultiLanguageVideoPlayer
                     {
                         FileName = Properties.Settings.Default.VlcPath,
                         Arguments =
-                            $"{_filePath} --aout=directx --directx-audio-device=\"{_videoInfo.AudioDevices[RightAudioDevice.SelectedItem.ToString()]}\" -I http --http-host localhost --http-port {VlcClient.SecondPlayerPort} --http-password=\"1\" --start-time={VideoPosition.Value}",
+                            $"--aout=directx --directx-audio-device=\"{_videoInfo.AudioDevices[RightAudioDevice.SelectedItem.ToString()]}\" -I http --http-host localhost --http-port {VlcClient.SecondPlayerPort} --http-password=\"1\" --start-time={VideoPosition.Value}",
                         UseShellExecute = false,
                         RedirectStandardOutput = true,
                         RedirectStandardError = true,
@@ -170,6 +179,7 @@ namespace MultiLanguageVideoPlayer
 
                 _vlcplayer.Start();
                 _vlcplayer2.Start();
+                VlcClient.AddFile(_filePath, LeftVideoRadioButton.Checked);
                 VlcClient.SetAudioTracks(LeftAudioTrack.SelectedIndex + 1, RightAudioTrack.SelectedIndex + 1);
             }
             else
@@ -250,6 +260,21 @@ namespace MultiLanguageVideoPlayer
             UpdateVideoTime();
             if (_isPlaying && !_ignoreBar)
                 VlcClient.SeekTo(VideoPosition.Value);
+        }
+
+        private void VideoRadioButton_Changed(object sender, EventArgs e)
+        {
+            if ((RadioButton) sender == LeftVideoRadioButton)
+            {
+                Properties.Settings.Default.DefaultVideoConfiguration = 0;
+                Properties.Settings.Default.Save();
+            }
+
+            if ((RadioButton) sender == RightVideoRadioButton)
+            {
+                Properties.Settings.Default.DefaultVideoConfiguration = 1;
+                Properties.Settings.Default.Save();
+            }
         }
     }
 }

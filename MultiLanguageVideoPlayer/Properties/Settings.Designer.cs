@@ -82,5 +82,17 @@ namespace MultiLanguageVideoPlayer.Properties {
                 this["DefaultRightTrack"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int DefaultVideoConfiguration {
+            get {
+                return ((int)(this["DefaultVideoConfiguration"]));
+            }
+            set {
+                this["DefaultVideoConfiguration"] = value;
+            }
+        }
     }
 }

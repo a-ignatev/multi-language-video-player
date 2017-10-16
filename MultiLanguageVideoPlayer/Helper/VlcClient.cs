@@ -14,11 +14,18 @@ namespace MultiLanguageVideoPlayer.Helper
 
         private static WebResponse RequestInternal(string command)
         {
-            var request =
-                (HttpWebRequest) WebRequest.Create(command);
-            request.Headers.Add("Authorization",
-                "Basic " + Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(":1")));
-            return request.GetResponse();
+            try
+            {
+                var request =
+                    (HttpWebRequest) WebRequest.Create(command);
+                request.Headers.Add("Authorization",
+                    "Basic " + Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(":1")));
+                return request.GetResponse();
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public static void SeekTo(int value)
@@ -52,9 +59,18 @@ namespace MultiLanguageVideoPlayer.Helper
             RequestInternal(SecondPlayerAddress + "/requests/status.xml?command=pl_stop");
         }
 
+        public static void AddFile(string filePath, bool showVideoForLeft)
+        {
+            var playcommand = $"/requests/status.xml?command=in_play&input={filePath}";
+            RequestInternal(FirstPlayerAddress + (showVideoForLeft ? playcommand : playcommand + "&option=novideo"));
+            RequestInternal(SecondPlayerAddress + (showVideoForLeft ? playcommand + "&option=novideo" : playcommand));
+        }
+
         public static int GetCurrentTime()
         {
             var response = RequestInternal(FirstPlayerAddress + "/requests/status.xml");
+            if (response == null)
+                return 0;
 
             PlaybackStatus playbackStatus = null;
             if (response.GetResponseStream() != null)
