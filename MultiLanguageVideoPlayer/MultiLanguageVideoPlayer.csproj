@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper\VlcClient.cs" />
     <Compile Include="Model\PlaybackStatus.cs" />
     <Compile Include="Helper\TimeHelper.cs" />
     <Compile Include="VideoAnalyzer.cs" />

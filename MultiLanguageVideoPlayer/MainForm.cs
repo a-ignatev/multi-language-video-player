@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
 using System.Windows.Forms;
-using System.Xml.Serialization;
 using MultiLanguageVideoPlayer.Helper;
 using MultiLanguageVideoPlayer.Model;
 using Timer = System.Timers.Timer;
@@ -16,12 +14,8 @@ namespace MultiLanguageVideoPlayer
         private Process _vlcplayer;
         private Process _vlcplayer2;
 
-        private const int FirstPlayerPort = 9090;
-        private const int SecondPlayerPort = 9091;
-
         private bool _isPlaying;
         private VideoInfo _videoInfo;
-        private readonly Timer _timer;
         private readonly object _lockObject = new object();
         private bool _ignoreBar;
 
@@ -31,20 +25,20 @@ namespace MultiLanguageVideoPlayer
             if (!string.IsNullOrEmpty(Properties.Settings.Default.VlcPath))
                 VlcPathText.Text = Properties.Settings.Default.VlcPath;
 
-            _timer = new Timer(1000);
-            _timer.Elapsed += (sender, args) =>
+            var timer = new Timer(1000);
+            timer.Elapsed += (sender, args) =>
             {
                 lock (_lockObject)
                 {
                     if (_isPlaying)
                     {
-                        var currentTime = GetCurrentTime();
+                        var currentTime = VlcClient.GetCurrentTime();
                         UpdateVideoPosition(currentTime);
                     }
                 }
             };
-            _timer.AutoReset = true;
-            _timer.Enabled = true;
+            timer.AutoReset = true;
+            timer.Enabled = true;
         }
 
         private void UpdateVideoPosition(int time)
@@ -152,7 +146,7 @@ namespace MultiLanguageVideoPlayer
                     {
                         FileName = Properties.Settings.Default.VlcPath,
                         Arguments =
-                            $"{_filePath} --aout=directx --directx-audio-device=\"{_videoInfo.AudioDevices[LeftAudioDevice.SelectedItem.ToString()]}\" -I http --http-host localhost --http-port {FirstPlayerPort} --http-password=\"1\" --start-time={VideoPosition.Value}",
+                            $"{_filePath} --aout=directx --directx-audio-device=\"{_videoInfo.AudioDevices[LeftAudioDevice.SelectedItem.ToString()]}\" -I http --http-host localhost --http-port {VlcClient.FirstPlayerPort} --http-password=\"1\" --start-time={VideoPosition.Value}",
                         UseShellExecute = false,
                         RedirectStandardOutput = true,
                         RedirectStandardError = true,
@@ -166,7 +160,7 @@ namespace MultiLanguageVideoPlayer
                     {
                         FileName = Properties.Settings.Default.VlcPath,
                         Arguments =
-                            $"{_filePath} --aout=directx --directx-audio-device=\"{_videoInfo.AudioDevices[RightAudioDevice.SelectedItem.ToString()]}\" -I http --http-host localhost --http-port {SecondPlayerPort} --http-password=\"1\" --start-time={VideoPosition.Value}",
+                            $"{_filePath} --aout=directx --directx-audio-device=\"{_videoInfo.AudioDevices[RightAudioDevice.SelectedItem.ToString()]}\" -I http --http-host localhost --http-port {VlcClient.SecondPlayerPort} --http-password=\"1\" --start-time={VideoPosition.Value}",
                         UseShellExecute = false,
                         RedirectStandardOutput = true,
                         RedirectStandardError = true,
@@ -176,11 +170,11 @@ namespace MultiLanguageVideoPlayer
 
                 _vlcplayer.Start();
                 _vlcplayer2.Start();
-                SetAudioTracks();
+                VlcClient.SetAudioTracks(LeftAudioTrack.SelectedIndex + 1, RightAudioTrack.SelectedIndex + 1);
             }
             else
             {
-                RequestPlayerCommand("pl_play");
+                VlcClient.Play();
             }
         }
 
@@ -228,7 +222,7 @@ namespace MultiLanguageVideoPlayer
             _isPlaying = false;
             UpdateUi();
 
-            RequestPlayerCommand("pl_stop");
+            VlcClient.Stop();
             if (_vlcplayer != null && !_vlcplayer.HasExited)
                 _vlcplayer.Kill();
             if (_vlcplayer2 != null && !_vlcplayer2.HasExited)
@@ -239,64 +233,15 @@ namespace MultiLanguageVideoPlayer
         {
             _isPlaying = false;
             UpdateUi();
-            RequestPlayerCommand("pl_pause");
-        }
-
-        private void RequestPlayerCommand(string command)
-        {
-            if (_vlcplayer == null || _vlcplayer.HasExited || _vlcplayer2 == null || _vlcplayer2.HasExited)
-                return;
-
-            MakeRequestInternal(command, FirstPlayerPort);
-            MakeRequestInternal(command, SecondPlayerPort);
-        }
-
-        private void SetAudioTracks()
-        {
-            var request =
-                (HttpWebRequest)WebRequest.Create("http://localhost:" + FirstPlayerPort +
-                                                  "/requests/status.xml?command=audio_track&val=" + (LeftAudioTrack.SelectedIndex + 1));
-            request.Headers.Add("Authorization",
-                "Basic " + Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(":1")));
-            request.GetResponse();
-
-            var request2 =
-                (HttpWebRequest)WebRequest.Create("http://localhost:" + SecondPlayerPort +
-                                                  "/requests/status.xml?command=audio_track&val=" + (RightAudioTrack.SelectedIndex + 1));
-            request2.Headers.Add("Authorization",
-                "Basic " + Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(":1")));
-            request2.GetResponse();
-        }
-
-        private static void SeekTo(int value)
-        {
-            var request =
-                (HttpWebRequest) WebRequest.Create("http://localhost:" + FirstPlayerPort +
-                                                   "/requests/status.xml?command=seek&val=" + value);
-            request.Headers.Add("Authorization",
-                "Basic " + Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(":1")));
-            request.GetResponse();
-
-            var request2 =
-                (HttpWebRequest) WebRequest.Create("http://localhost:" + SecondPlayerPort +
-                                                   "/requests/status.xml?command=seek&val=" + value);
-            request2.Headers.Add("Authorization",
-                "Basic " + Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(":1")));
-            request2.GetResponse();
-        }
-
-        private static void MakeRequestInternal(string command, int port)
-        {
-            var request =
-                (HttpWebRequest) WebRequest.Create("http://localhost:" + port +
-                                                   "/requests/status.xml?command=" + command);
-            request.Headers.Add("Authorization",
-                "Basic " + Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(":1")));
-            request.GetResponse();
+            VlcClient.Pause();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (_vlcplayer == null || _vlcplayer != null && _vlcplayer.HasExited ||
+                _vlcplayer2 == null || _vlcplayer2 != null && _vlcplayer2.HasExited)
+                return;
+
             StopButton_Click(sender, e);
         }
 
@@ -304,22 +249,7 @@ namespace MultiLanguageVideoPlayer
         {
             UpdateVideoTime();
             if (_isPlaying && !_ignoreBar)
-                SeekTo(VideoPosition.Value);
-        }
-
-        private static int GetCurrentTime()
-        {
-            var request =
-                (HttpWebRequest) WebRequest.Create("http://localhost:" + FirstPlayerPort + "/requests/status.xml");
-            request.Headers.Add("Authorization",
-                "Basic " + Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(":1")));
-            var response = request.GetResponse();
-
-            PlaybackStatus playbackStatus = null;
-            if (response.GetResponseStream() != null)
-                playbackStatus = (PlaybackStatus) new XmlSerializer(typeof(PlaybackStatus)).Deserialize(response.GetResponseStream());
-
-            return playbackStatus?.Time ?? 0;
+                VlcClient.SeekTo(VideoPosition.Value);
         }
     }
 }
