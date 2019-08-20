@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MultiLanguageVideoPlayer.Helper
+namespace MultiLanguageVideoPlayer.Helpers
 {
     public static class TimeHelper
     {
@@ -9,10 +9,9 @@ namespace MultiLanguageVideoPlayer.Helper
          */
         public static int StringToSeconds(string time)
         {
-            DateTime datetime;
-            if (DateTime.TryParse(time, out datetime))
+            if (TimeSpan.TryParse(time, out var duration))
             {
-                return (int) datetime.TimeOfDay.TotalSeconds;
+                return (int)duration.TotalSeconds;
             }
 
             return 0;
