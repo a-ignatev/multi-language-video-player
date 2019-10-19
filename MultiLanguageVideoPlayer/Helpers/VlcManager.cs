@@ -11,14 +11,23 @@ namespace MultiLanguageVideoPlayer.Helpers
             _vlcPlayer != null && _vlcPlayer2 != null &&
             !_vlcPlayer.HasExited && !_vlcPlayer2.HasExited;
 
-        public void Init()
+        public bool Init()
         {
             Trace.WriteLine("Init VLC Manager");
-            _vlcPlayer = CreateVlcProcess(VlcClient.FirstPlayerPort);
-            _vlcPlayer.Start();
+            try
+            {
+                _vlcPlayer = CreateVlcProcess(VlcClient.FirstPlayerPort);
+                _vlcPlayer.Start();
 
-            _vlcPlayer2 = CreateVlcProcess(VlcClient.SecondPlayerPort);
-            _vlcPlayer2.Start();
+                _vlcPlayer2 = CreateVlcProcess(VlcClient.SecondPlayerPort);
+                _vlcPlayer2.Start();
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private static Process CreateVlcProcess(int port)
@@ -42,10 +51,17 @@ namespace MultiLanguageVideoPlayer.Helpers
         {
             Trace.WriteLine("Stop VLC Manager");
 
-            if (_vlcPlayer != null && !_vlcPlayer.HasExited)
-                _vlcPlayer.Kill();
-            if (_vlcPlayer2 != null && !_vlcPlayer2.HasExited)
-                _vlcPlayer2.Kill();
+            try
+            {
+                if (_vlcPlayer != null && !_vlcPlayer.HasExited)
+                    _vlcPlayer.Kill();
+                if (_vlcPlayer2 != null && !_vlcPlayer2.HasExited)
+                    _vlcPlayer2.Kill();
+            }
+            catch
+            {
+                Trace.WriteLine("Error while killing VLCs");
+            }
         }
     }
 }

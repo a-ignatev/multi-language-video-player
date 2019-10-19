@@ -34,7 +34,21 @@ namespace MultiLanguageVideoPlayer
                 _vlcManager.Stop();
             };
 
-            _vlcManager.Init();
+            if (!string.IsNullOrWhiteSpace(VlcPathText.Text))
+            {
+                TryInitVlcManager();
+            }
+        }
+
+        private void TryInitVlcManager()
+        {
+            if (!_vlcManager.Init())
+            {
+                MessageBox.Show(@"Path to VLC is incorrect");
+                VlcPathText.Text = string.Empty;
+                Properties.Settings.Default.VlcPath = string.Empty;
+                Properties.Settings.Default.Save();
+            }
         }
 
         private void InitDefaultValuesFromSettings()
@@ -99,6 +113,9 @@ namespace MultiLanguageVideoPlayer
 
         private void FileBrowseButton_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(VlcPathText.Text))
+                return;
+
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 if (_playStatus != PlayStatus.Stopped)
@@ -226,6 +243,7 @@ namespace MultiLanguageVideoPlayer
                 VlcPathText.Text = openFileDialog.FileName;
                 Properties.Settings.Default.VlcPath = openFileDialog.FileName;
                 Properties.Settings.Default.Save();
+                TryInitVlcManager();
             }
         }
 
