@@ -4,35 +4,35 @@ namespace MultiLanguageVideoPlayer.Helpers
 {
     public class VlcManager
     {
-        private Process _vlcplayer;
-        private Process _vlcplayer2;
+        private Process _vlcPlayer;
+        private Process _vlcPlayer2;
 
         public bool IsInitialized =>
-            _vlcplayer != null && _vlcplayer2 != null &&
-            !_vlcplayer.HasExited && !_vlcplayer2.HasExited;
+            _vlcPlayer != null && _vlcPlayer2 != null &&
+            !_vlcPlayer.HasExited && !_vlcPlayer2.HasExited;
 
-        public void Init(string leftAudioDevice, string rightAudioDevice, int position)
+        public void Init()
         {
-            Trace.WriteLine("Init Vlc Manager");
-            _vlcplayer = CreateVlcProcess(leftAudioDevice, VlcClient.FirstPlayerPort, position);
-            _vlcplayer.Start();
+            Trace.WriteLine("Init VLC Manager");
+            _vlcPlayer = CreateVlcProcess(VlcClient.FirstPlayerPort);
+            _vlcPlayer.Start();
 
-            _vlcplayer2 = CreateVlcProcess(rightAudioDevice, VlcClient.SecondPlayerPort, position);
-            _vlcplayer2.Start();
+            _vlcPlayer2 = CreateVlcProcess(VlcClient.SecondPlayerPort);
+            _vlcPlayer2.Start();
         }
 
-        private static Process CreateVlcProcess(string audioDevice, string port, int position)
+        private static Process CreateVlcProcess(int port)
         {
             return new Process
             {
                 StartInfo =
                 {
                     FileName = Properties.Settings.Default.VlcPath,
-                    Arguments =
-                        $"--aout=directx --directx-audio-device=\"{audioDevice}\" -I http --http-host localhost --http-port {port} --http-password=\"1\" --start-time={position}",
+                    Arguments = $"--intf rc --rc-host 127.0.0.1:{port} --rc-quiet",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
+                    RedirectStandardInput = true,
                     CreateNoWindow = false
                 }
             };
@@ -40,12 +40,12 @@ namespace MultiLanguageVideoPlayer.Helpers
 
         internal void Stop()
         {
-            Trace.WriteLine("Stop Vlc Manager");
+            Trace.WriteLine("Stop VLC Manager");
 
-            if (_vlcplayer != null && !_vlcplayer.HasExited)
-                _vlcplayer.Kill();
-            if (_vlcplayer2 != null && !_vlcplayer2.HasExited)
-                _vlcplayer2.Kill();
+            if (_vlcPlayer != null && !_vlcPlayer.HasExited)
+                _vlcPlayer.Kill();
+            if (_vlcPlayer2 != null && !_vlcPlayer2.HasExited)
+                _vlcPlayer2.Kill();
         }
     }
 }

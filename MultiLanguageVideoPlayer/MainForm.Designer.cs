@@ -70,7 +70,7 @@
             firstConfigTitle.Location = new System.Drawing.Point(6, 0);
             firstConfigTitle.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             firstConfigTitle.Name = "firstConfigTitle";
-            firstConfigTitle.Size = new System.Drawing.Size(700, 38);
+            firstConfigTitle.Size = new System.Drawing.Size(640, 36);
             firstConfigTitle.TabIndex = 5;
             firstConfigTitle.Text = "First Audio Configuration:";
             firstConfigTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -82,10 +82,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             secondConfigTitle.AutoSize = true;
             secondConfigTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            secondConfigTitle.Location = new System.Drawing.Point(718, 0);
+            secondConfigTitle.Location = new System.Drawing.Point(658, 0);
             secondConfigTitle.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             secondConfigTitle.Name = "secondConfigTitle";
-            secondConfigTitle.Size = new System.Drawing.Size(700, 38);
+            secondConfigTitle.Size = new System.Drawing.Size(641, 36);
             secondConfigTitle.TabIndex = 6;
             secondConfigTitle.Text = "Second Audio Configuration";
             secondConfigTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -96,13 +96,13 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.LeftAudioTrack.FormattingEnabled = true;
-            this.LeftAudioTrack.ItemHeight = 25;
+            this.LeftAudioTrack.ItemHeight = 24;
             this.LeftAudioTrack.Items.AddRange(new object[] {
             "Audiotracks will be shown here"});
-            this.LeftAudioTrack.Location = new System.Drawing.Point(6, 145);
-            this.LeftAudioTrack.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.LeftAudioTrack.Location = new System.Drawing.Point(6, 138);
+            this.LeftAudioTrack.Margin = new System.Windows.Forms.Padding(6);
             this.LeftAudioTrack.Name = "LeftAudioTrack";
-            this.LeftAudioTrack.Size = new System.Drawing.Size(700, 154);
+            this.LeftAudioTrack.Size = new System.Drawing.Size(640, 148);
             this.LeftAudioTrack.TabIndex = 1;
             this.LeftAudioTrack.SelectedIndexChanged += new System.EventHandler(this.RefreshPlayButton_SelectedIndexChanged);
             // 
@@ -112,13 +112,13 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.LeftAudioDevice.FormattingEnabled = true;
-            this.LeftAudioDevice.ItemHeight = 25;
+            this.LeftAudioDevice.ItemHeight = 24;
             this.LeftAudioDevice.Items.AddRange(new object[] {
             "Audio devices will be shown here"});
-            this.LeftAudioDevice.Location = new System.Drawing.Point(6, 366);
-            this.LeftAudioDevice.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.LeftAudioDevice.Location = new System.Drawing.Point(6, 351);
+            this.LeftAudioDevice.Margin = new System.Windows.Forms.Padding(6);
             this.LeftAudioDevice.Name = "LeftAudioDevice";
-            this.LeftAudioDevice.Size = new System.Drawing.Size(700, 154);
+            this.LeftAudioDevice.Size = new System.Drawing.Size(640, 148);
             this.LeftAudioDevice.TabIndex = 2;
             this.LeftAudioDevice.SelectedIndexChanged += new System.EventHandler(this.RefreshPlayButton_SelectedIndexChanged);
             // 
@@ -128,10 +128,10 @@
             // 
             // FileBrowseButton
             // 
-            this.FileBrowseButton.Location = new System.Drawing.Point(24, 87);
-            this.FileBrowseButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.FileBrowseButton.Location = new System.Drawing.Point(22, 84);
+            this.FileBrowseButton.Margin = new System.Windows.Forms.Padding(6);
             this.FileBrowseButton.Name = "FileBrowseButton";
-            this.FileBrowseButton.Size = new System.Drawing.Size(150, 44);
+            this.FileBrowseButton.Size = new System.Drawing.Size(138, 42);
             this.FileBrowseButton.TabIndex = 3;
             this.FileBrowseButton.Text = "Browse file...";
             this.FileBrowseButton.UseVisualStyleBackColor = true;
@@ -140,10 +140,10 @@
             // SelectedFileLabel
             // 
             this.SelectedFileLabel.AutoSize = true;
-            this.SelectedFileLabel.Location = new System.Drawing.Point(186, 96);
+            this.SelectedFileLabel.Location = new System.Drawing.Point(171, 92);
             this.SelectedFileLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.SelectedFileLabel.Name = "SelectedFileLabel";
-            this.SelectedFileLabel.Size = new System.Drawing.Size(116, 25);
+            this.SelectedFileLabel.Size = new System.Drawing.Size(104, 25);
             this.SelectedFileLabel.TabIndex = 4;
             this.SelectedFileLabel.Text = "seleted file";
             this.SelectedFileLabel.Visible = false;
@@ -170,27 +170,27 @@
             this.ConfigurationPanel.Controls.Add(this.LeftVideoRB, 0, 1);
             this.ConfigurationPanel.Controls.Add(secondConfigTitle, 1, 0);
             this.ConfigurationPanel.Enabled = false;
-            this.ConfigurationPanel.Location = new System.Drawing.Point(24, 317);
-            this.ConfigurationPanel.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.ConfigurationPanel.Location = new System.Drawing.Point(22, 304);
+            this.ConfigurationPanel.Margin = new System.Windows.Forms.Padding(6);
             this.ConfigurationPanel.Name = "ConfigurationPanel";
             this.ConfigurationPanel.RowCount = 6;
-            this.ConfigurationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
-            this.ConfigurationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 63F));
-            this.ConfigurationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
+            this.ConfigurationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+            this.ConfigurationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.ConfigurationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.ConfigurationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.ConfigurationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
+            this.ConfigurationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.ConfigurationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.ConfigurationPanel.Size = new System.Drawing.Size(1424, 544);
+            this.ConfigurationPanel.Size = new System.Drawing.Size(1305, 522);
             this.ConfigurationPanel.TabIndex = 5;
             // 
             // RightVideoRB
             // 
             this.RightVideoRB.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.RightVideoRB.AutoSize = true;
-            this.RightVideoRB.Location = new System.Drawing.Point(942, 55);
-            this.RightVideoRB.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.RightVideoRB.Location = new System.Drawing.Point(866, 51);
+            this.RightVideoRB.Margin = new System.Windows.Forms.Padding(6);
             this.RightVideoRB.Name = "RightVideoRB";
-            this.RightVideoRB.Size = new System.Drawing.Size(251, 29);
+            this.RightVideoRB.Size = new System.Drawing.Size(225, 29);
             this.RightVideoRB.TabIndex = 12;
             this.RightVideoRB.TabStop = true;
             this.RightVideoRB.Text = "100% sync with video";
@@ -204,10 +204,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(718, 322);
+            this.label7.Location = new System.Drawing.Point(658, 309);
             this.label7.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(700, 38);
+            this.label7.Size = new System.Drawing.Size(641, 36);
             this.label7.TabIndex = 10;
             this.label7.Text = "Audio device:";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -218,10 +218,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 322);
+            this.label6.Location = new System.Drawing.Point(6, 309);
             this.label6.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(700, 38);
+            this.label6.Size = new System.Drawing.Size(640, 36);
             this.label6.TabIndex = 9;
             this.label6.Text = "Audio device:";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -232,13 +232,13 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.RightAudioDevice.FormattingEnabled = true;
-            this.RightAudioDevice.ItemHeight = 25;
+            this.RightAudioDevice.ItemHeight = 24;
             this.RightAudioDevice.Items.AddRange(new object[] {
             "Audio devices will be shown here"});
-            this.RightAudioDevice.Location = new System.Drawing.Point(718, 366);
-            this.RightAudioDevice.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.RightAudioDevice.Location = new System.Drawing.Point(658, 351);
+            this.RightAudioDevice.Margin = new System.Windows.Forms.Padding(6);
             this.RightAudioDevice.Name = "RightAudioDevice";
-            this.RightAudioDevice.Size = new System.Drawing.Size(700, 154);
+            this.RightAudioDevice.Size = new System.Drawing.Size(641, 148);
             this.RightAudioDevice.TabIndex = 3;
             this.RightAudioDevice.SelectedIndexChanged += new System.EventHandler(this.RefreshPlayButton_SelectedIndexChanged);
             // 
@@ -248,13 +248,13 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.RightAudioTrack.FormattingEnabled = true;
-            this.RightAudioTrack.ItemHeight = 25;
+            this.RightAudioTrack.ItemHeight = 24;
             this.RightAudioTrack.Items.AddRange(new object[] {
             "Audiotracks will be shown here"});
-            this.RightAudioTrack.Location = new System.Drawing.Point(718, 145);
-            this.RightAudioTrack.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.RightAudioTrack.Location = new System.Drawing.Point(658, 138);
+            this.RightAudioTrack.Margin = new System.Windows.Forms.Padding(6);
             this.RightAudioTrack.Name = "RightAudioTrack";
-            this.RightAudioTrack.Size = new System.Drawing.Size(700, 154);
+            this.RightAudioTrack.Size = new System.Drawing.Size(641, 148);
             this.RightAudioTrack.TabIndex = 4;
             this.RightAudioTrack.SelectedIndexChanged += new System.EventHandler(this.RefreshPlayButton_SelectedIndexChanged);
             // 
@@ -264,10 +264,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 101);
+            this.label4.Location = new System.Drawing.Point(6, 96);
             this.label4.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(700, 38);
+            this.label4.Size = new System.Drawing.Size(640, 36);
             this.label4.TabIndex = 7;
             this.label4.Text = "Audio track:";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -278,10 +278,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(718, 101);
+            this.label5.Location = new System.Drawing.Point(658, 96);
             this.label5.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(700, 38);
+            this.label5.Size = new System.Drawing.Size(641, 36);
             this.label5.TabIndex = 8;
             this.label5.Text = "Audio track:";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -290,10 +290,10 @@
             // 
             this.LeftVideoRB.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.LeftVideoRB.AutoSize = true;
-            this.LeftVideoRB.Location = new System.Drawing.Point(230, 55);
-            this.LeftVideoRB.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.LeftVideoRB.Location = new System.Drawing.Point(213, 51);
+            this.LeftVideoRB.Margin = new System.Windows.Forms.Padding(6);
             this.LeftVideoRB.Name = "LeftVideoRB";
-            this.LeftVideoRB.Size = new System.Drawing.Size(251, 29);
+            this.LeftVideoRB.Size = new System.Drawing.Size(225, 29);
             this.LeftVideoRB.TabIndex = 11;
             this.LeftVideoRB.TabStop = true;
             this.LeftVideoRB.Text = "100% sync with video";
@@ -305,10 +305,10 @@
             // 
             this.PlayButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.PlayButton.Enabled = false;
-            this.PlayButton.Location = new System.Drawing.Point(500, 238);
-            this.PlayButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.PlayButton.Location = new System.Drawing.Point(458, 228);
+            this.PlayButton.Margin = new System.Windows.Forms.Padding(6);
             this.PlayButton.Name = "PlayButton";
-            this.PlayButton.Size = new System.Drawing.Size(150, 44);
+            this.PlayButton.Size = new System.Drawing.Size(138, 42);
             this.PlayButton.TabIndex = 6;
             this.PlayButton.Text = "▷ Play";
             this.PlayButton.UseVisualStyleBackColor = true;
@@ -319,19 +319,19 @@
             this.VlcPathText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.VlcPathText.Enabled = false;
-            this.VlcPathText.Location = new System.Drawing.Point(164, 31);
-            this.VlcPathText.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.VlcPathText.Location = new System.Drawing.Point(150, 30);
+            this.VlcPathText.Margin = new System.Windows.Forms.Padding(6);
             this.VlcPathText.Name = "VlcPathText";
-            this.VlcPathText.Size = new System.Drawing.Size(1220, 31);
+            this.VlcPathText.Size = new System.Drawing.Size(1119, 29);
             this.VlcPathText.TabIndex = 7;
             // 
             // VlcPathBrowse
             // 
             this.VlcPathBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.VlcPathBrowse.Location = new System.Drawing.Point(1394, 27);
+            this.VlcPathBrowse.Location = new System.Drawing.Point(1278, 26);
             this.VlcPathBrowse.Margin = new System.Windows.Forms.Padding(0);
             this.VlcPathBrowse.Name = "VlcPathBrowse";
-            this.VlcPathBrowse.Size = new System.Drawing.Size(60, 42);
+            this.VlcPathBrowse.Size = new System.Drawing.Size(55, 40);
             this.VlcPathBrowse.TabIndex = 8;
             this.VlcPathBrowse.Text = "...";
             this.VlcPathBrowse.UseVisualStyleBackColor = true;
@@ -340,10 +340,10 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(18, 37);
+            this.label3.Location = new System.Drawing.Point(17, 36);
             this.label3.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(133, 25);
+            this.label3.Size = new System.Drawing.Size(124, 25);
             this.label3.TabIndex = 9;
             this.label3.Text = "Path to VLC:";
             // 
@@ -351,10 +351,10 @@
             // 
             this.StopButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.StopButton.Enabled = false;
-            this.StopButton.Location = new System.Drawing.Point(820, 238);
-            this.StopButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.StopButton.Location = new System.Drawing.Point(752, 228);
+            this.StopButton.Margin = new System.Windows.Forms.Padding(6);
             this.StopButton.Name = "StopButton";
-            this.StopButton.Size = new System.Drawing.Size(150, 44);
+            this.StopButton.Size = new System.Drawing.Size(138, 42);
             this.StopButton.TabIndex = 10;
             this.StopButton.Text = "⬜ Stop";
             this.StopButton.UseVisualStyleBackColor = true;
@@ -364,10 +364,10 @@
             // 
             this.PauseButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.PauseButton.Enabled = false;
-            this.PauseButton.Location = new System.Drawing.Point(660, 238);
-            this.PauseButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.PauseButton.Location = new System.Drawing.Point(605, 228);
+            this.PauseButton.Margin = new System.Windows.Forms.Padding(6);
             this.PauseButton.Name = "PauseButton";
-            this.PauseButton.Size = new System.Drawing.Size(150, 44);
+            this.PauseButton.Size = new System.Drawing.Size(138, 42);
             this.PauseButton.TabIndex = 11;
             this.PauseButton.Text = "⏸Pause";
             this.PauseButton.UseVisualStyleBackColor = true;
@@ -378,11 +378,11 @@
             this.VideoPosition.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.VideoPosition.Enabled = false;
-            this.VideoPosition.Location = new System.Drawing.Point(24, 133);
-            this.VideoPosition.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.VideoPosition.Location = new System.Drawing.Point(22, 128);
+            this.VideoPosition.Margin = new System.Windows.Forms.Padding(6);
             this.VideoPosition.Maximum = 8000;
             this.VideoPosition.Name = "VideoPosition";
-            this.VideoPosition.Size = new System.Drawing.Size(1430, 90);
+            this.VideoPosition.Size = new System.Drawing.Size(1311, 80);
             this.VideoPosition.TabIndex = 12;
             this.VideoPosition.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
             this.VideoPosition.ValueChanged += new System.EventHandler(this.VideoPosition_ValueChanged);
@@ -395,7 +395,7 @@
             this.VideoTimeLabel.Location = new System.Drawing.Point(0, 0);
             this.VideoTimeLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.VideoTimeLabel.Name = "VideoTimeLabel";
-            this.VideoTimeLabel.Size = new System.Drawing.Size(1424, 33);
+            this.VideoTimeLabel.Size = new System.Drawing.Size(1305, 32);
             this.VideoTimeLabel.TabIndex = 13;
             this.VideoTimeLabel.Text = "duration";
             this.VideoTimeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -406,17 +406,17 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.VideoTimeLabel);
-            this.panel1.Location = new System.Drawing.Point(24, 200);
-            this.panel1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panel1.Location = new System.Drawing.Point(22, 192);
+            this.panel1.Margin = new System.Windows.Forms.Padding(6);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1424, 33);
+            this.panel1.Size = new System.Drawing.Size(1305, 32);
             this.panel1.TabIndex = 14;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1472, 885);
+            this.ClientSize = new System.Drawing.Size(1349, 850);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.VideoPosition);
             this.Controls.Add(this.PauseButton);
@@ -428,7 +428,7 @@
             this.Controls.Add(this.ConfigurationPanel);
             this.Controls.Add(this.SelectedFileLabel);
             this.Controls.Add(this.FileBrowseButton);
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "MainForm";
             this.Text = "MultiLanguageVideoPlayer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);

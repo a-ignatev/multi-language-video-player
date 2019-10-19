@@ -8,9 +8,11 @@ namespace MultiLanguageVideoPlayer.Model
         public int Duration;
 
         /** Display names */
-        public readonly List<string> AudioTracks = new List<string>();
+        public List<string> AudioTracks = new List<string>();
+
+        public string Title;
 
         /** Display name -> Device GUID */
-        public readonly Dictionary<string, string> AudioDevices = new Dictionary<string, string>();
+        public Dictionary<string, string> AudioDevices = new Dictionary<string, string>();
     }
 }

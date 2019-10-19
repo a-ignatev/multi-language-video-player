@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.IO;
-using System.Threading;
 using System.Windows.Forms;
 using MultiLanguageVideoPlayer.Helpers;
 using MultiLanguageVideoPlayer.Model;
@@ -26,9 +24,36 @@ namespace MultiLanguageVideoPlayer
         public MainForm()
         {
             InitializeComponent();
+            SetupTimerSync();
+            InitDefaultValuesFromSettings();
+
+            Application.ApplicationExit += (_, __) =>
+            {
+                if (_vlcManager.IsInitialized)
+                    VlcClient.Stop();
+                _vlcManager.Stop();
+            };
+
+            _vlcManager.Init();
+        }
+
+        private void InitDefaultValuesFromSettings()
+        {
             if (!string.IsNullOrEmpty(Properties.Settings.Default.VlcPath))
                 VlcPathText.Text = Properties.Settings.Default.VlcPath;
 
+            if (Properties.Settings.Default.DefaultVideoConfiguration == 0)
+            {
+                LeftVideoRB.Checked = true;
+            }
+            else
+            {
+                RightVideoRB.Checked = true;
+            }
+        }
+
+        private void SetupTimerSync()
+        {
             var timer = new Timer(1000);
             timer.Elapsed += (sender, args) =>
             {
@@ -44,32 +69,13 @@ namespace MultiLanguageVideoPlayer
             };
             timer.AutoReset = true;
             timer.Enabled = true;
-
-            if (Properties.Settings.Default.DefaultVideoConfiguration == 0)
-            {
-                LeftVideoRB.Checked = true;
-            }
-            else
-            {
-                RightVideoRB.Checked = true;
-            }
-
-            Application.ApplicationExit += (_, __) =>
-            {
-                if (_vlcManager.IsInitialized)
-                    VlcClient.Stop();
-                _vlcManager.Stop();
-            };
         }
 
         private void UpdateVideoPosition(int time)
         {
             if (!_blockVideoPositionValueChange)
             {
-                VideoPosition.Invoke((MethodInvoker) delegate
-                {
-                    VideoPosition.Value = time;
-                });
+                VideoPosition.Invoke((MethodInvoker) delegate { VideoPosition.Value = time; });
             }
         }
 
@@ -95,37 +101,39 @@ namespace MultiLanguageVideoPlayer
         {
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
+                if (_playStatus != PlayStatus.Stopped)
+                    StopButton_Click(null, null);
+
                 SelectedFileLabel.Visible = true;
                 _filePath = openFileDialog.FileName;
                 SelectedFileLabel.Text = openFileDialog.FileName;
-                Text = Path.GetFileName(openFileDialog.FileName);
 
-                new VideoAnalyzer(openFileDialog.FileName, videoinfo =>
+                _videoInfo = VlcClient.GetFileInfo(openFileDialog.FileName);
+
+                Text = _videoInfo.Title;
+
+                LeftAudioTrack.Items.Clear();
+                RightAudioTrack.Items.Clear();
+                LeftAudioDevice.Items.Clear();
+                RightAudioDevice.Items.Clear();
+
+                foreach (var audioTrack in _videoInfo.AudioTracks)
                 {
-                    _videoInfo = videoinfo;
+                    LeftAudioTrack.Items.Add(audioTrack);
+                    RightAudioTrack.Items.Add(audioTrack);
+                }
 
-                    LeftAudioTrack.Items.Clear();
-                    LeftAudioDevice.Items.Clear();
-                    RightAudioTrack.Items.Clear();
-                    RightAudioDevice.Items.Clear();
+                foreach (var audioDevice in _videoInfo.AudioDevices)
+                {
+                    LeftAudioDevice.Items.Add(audioDevice.Key);
+                    RightAudioDevice.Items.Add(audioDevice.Key);
+                }
 
-                    foreach (var audioTrack in videoinfo.AudioTracks)
-                    {
-                        LeftAudioTrack.Items.Add(audioTrack);
-                        RightAudioTrack.Items.Add(audioTrack);
-                    }
+                VideoPosition.SetRange(0, _videoInfo.Duration);
 
-                    foreach (var audioDevice in videoinfo.AudioDevices)
-                    {
-                        LeftAudioDevice.Items.Add(audioDevice.Key);
-                        RightAudioDevice.Items.Add(audioDevice.Key);
-                    }
-
-                    VideoPosition.SetRange(0, videoinfo.Duration);
-                    VideoTimeLabel.Visible = true;
-                    VideoPosition.Enabled = true;
-                    UpdateVideoTime();
-                });
+                VideoTimeLabel.Visible = true;
+                VideoPosition.Enabled = true;
+                UpdateVideoTime();
 
                 ConfigurationPanel.Enabled = true;
 
@@ -149,7 +157,8 @@ namespace MultiLanguageVideoPlayer
 
         private void UpdateVideoTime()
         {
-            var text = $@"{TimeHelper.SecondsToString(VideoPosition.Value)} - {TimeHelper.SecondsToString(_videoInfo.Duration)}";
+            var text =
+                $@"{TimeHelper.SecondsToString(VideoPosition.Value)} - {TimeHelper.SecondsToString(_videoInfo.Duration)}";
             _toolTip.SetToolTip(VideoTimeLabel, $"{text}\nAudio time difference: {_timeStatusTimeDifference} sec");
             VideoTimeLabel.Text = $@"{text} ({_timeStatusTimeDifference})";
 
@@ -158,54 +167,55 @@ namespace MultiLanguageVideoPlayer
 
         private void PlayButton_Click(object sender, EventArgs e)
         {
-            _playStatus = PlayStatus.Playing;
-            UpdateUi();
-
-            if (!_vlcManager.IsInitialized)
+            if (_playStatus == PlayStatus.Stopped)
             {
-                var leftAudioDevice = _videoInfo.AudioDevices[LeftAudioDevice.SelectedItem.ToString()];
-                var rightAudioDevice = _videoInfo.AudioDevices[RightAudioDevice.SelectedItem.ToString()];
-                var position = VideoPosition.Value;
-                _vlcManager.Init(leftAudioDevice, rightAudioDevice, position);
                 VlcClient.AddFile(_filePath, IsFirstPlayerMain);
                 VlcClient.SetAudioTracks(LeftAudioTrack.SelectedIndex + 1, RightAudioTrack.SelectedIndex + 1);
 
-                Thread.Sleep(1000);
+                var leftAudioDevice = _videoInfo.AudioDevices[LeftAudioDevice.SelectedItem.ToString()];
+                var rightAudioDevice = _videoInfo.AudioDevices[RightAudioDevice.SelectedItem.ToString()];
+                VlcClient.SetAudioDevices(leftAudioDevice, rightAudioDevice);
                 VlcClient.SeekTo(VideoPosition.Value);
             }
-            else
+            else if (_playStatus == PlayStatus.Paused)
             {
                 VlcClient.SeekTo(VideoPosition.Value);
-                VlcClient.Play();
+                VlcClient.TogglePause();
             }
+
+            _playStatus = PlayStatus.Playing;
+            UpdateUi();
         }
 
         private void RefreshPlayButton_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateUi();
 
-            if ((ListBox) sender == LeftAudioDevice)
+            if (sender is ListBox listBox)
             {
-                Properties.Settings.Default.DefaultLeftDevice = LeftAudioDevice.SelectedIndex;
-                Properties.Settings.Default.Save();
-            }
+                if (listBox == LeftAudioDevice)
+                {
+                    Properties.Settings.Default.DefaultLeftDevice = LeftAudioDevice.SelectedIndex;
+                    Properties.Settings.Default.Save();
+                }
 
-            if ((ListBox) sender == RightAudioDevice)
-            {
-                Properties.Settings.Default.DefaultRightDevice = RightAudioDevice.SelectedIndex;
-                Properties.Settings.Default.Save();
-            }
+                if (listBox == RightAudioDevice)
+                {
+                    Properties.Settings.Default.DefaultRightDevice = RightAudioDevice.SelectedIndex;
+                    Properties.Settings.Default.Save();
+                }
 
-            if ((ListBox) sender == LeftAudioTrack)
-            {
-                Properties.Settings.Default.DefaultLeftTrack = LeftAudioTrack.SelectedIndex;
-                Properties.Settings.Default.Save();
-            }
+                if (listBox == LeftAudioTrack)
+                {
+                    Properties.Settings.Default.DefaultLeftTrack = LeftAudioTrack.SelectedIndex;
+                    Properties.Settings.Default.Save();
+                }
 
-            if ((ListBox) sender == RightAudioTrack)
-            {
-                Properties.Settings.Default.DefaultRightTrack = RightAudioTrack.SelectedIndex;
-                Properties.Settings.Default.Save();
+                if (listBox == RightAudioTrack)
+                {
+                    Properties.Settings.Default.DefaultRightTrack = RightAudioTrack.SelectedIndex;
+                    Properties.Settings.Default.Save();
+                }
             }
         }
 
@@ -221,12 +231,13 @@ namespace MultiLanguageVideoPlayer
 
         private void StopButton_Click(object sender, EventArgs e)
         {
+            if (_playStatus == PlayStatus.Paused)
+                VlcClient.TogglePause();
+
+            VlcClient.Stop();
+
             _playStatus = PlayStatus.Stopped;
             UpdateUi();
-
-            if (_vlcManager.IsInitialized)
-                VlcClient.Stop();
-            _vlcManager.Stop();
         }
 
         private void PauseButton_Click(object sender, EventArgs e)
@@ -234,7 +245,7 @@ namespace MultiLanguageVideoPlayer
             _playStatus = PlayStatus.Paused;
             UpdateUi();
 
-            VlcClient.Pause();
+            VlcClient.TogglePause();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
